@@ -22,8 +22,21 @@ const treeFactory = (arr) => {
   return root;
 };
 
-const buildTree = (arr) => {};
+const buildTree = (arr) => {
+  //sort array
+  arr.sort();
+  //remove duplicates
+};
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let bst = treeFactory(array);
-prettyPrint(bst);
+//prettyPrint(bst);
+
+function uniq(a) {
+  var seen = {};
+  return a.filter(function (item) {
+    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+  });
+}
+
+console.log(uniq(array));
