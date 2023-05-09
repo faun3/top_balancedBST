@@ -19,15 +19,32 @@ function uniq(a) {
 }
 
 const nodeFactory = (val) => {
-  data = val;
+  data = parseInt(val);
   left = null;
   right = null;
   return { data, left, right };
 };
 
 const treeFactory = (arr) => {
-  node = buildTree(arr, 0, arr.length - 1);
-  return node;
+  rootNode = buildTree(arr, 0, arr.length - 1);
+
+  const insert = (value) => {
+    let newNode = nodeFactory(value);
+  };
+
+  const find = (value, searcher = rootNode) => {
+    value = parseInt(value);
+    if (searcher === null || searcher.data === value) {
+      return searcher;
+    }
+
+    if (searcher.data < value) {
+      return find(value, searcher.right);
+    }
+
+    return find(value, searcher.left);
+  };
+  return { rootNode, insert, find };
 };
 
 const buildTree = (arr, start, end) => {
@@ -36,7 +53,7 @@ const buildTree = (arr, start, end) => {
 
   //no overflow method of calculating mid
   let mid = parseInt((start + end) / 2);
-  let node = nodeFactory(arr[mid]);
+  let node = nodeFactory(parseInt(arr[mid]));
   node.left = buildTree(arr, start, mid - 1);
   node.right = buildTree(arr, mid + 1, end);
   return node;
@@ -55,8 +72,10 @@ const arraySanitizer = (arr) => {
 };
 
 const array1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 sanitizedArr = arraySanitizer(array1);
 console.log(sanitizedArr);
 let tree = treeFactory(sanitizedArr);
-prettyPrint(tree);
+prettyPrint(tree.rootNode);
+
+let found = tree.find(4);
+console.log(found);
