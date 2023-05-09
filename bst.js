@@ -43,6 +43,50 @@ const treeFactory = (arr) => {
     return searcher;
   };
 
+  const remove = (value, searcher = rootNode) => {
+    //removal of a node has two cases
+    // 1) the node has only one child
+    //  -we copy the child to the node and delete the node
+    //  2) the node has 2 children
+    //  -we find the inorder predecessor of the node
+    //  -we find the inorder successor of the node (if the right child is not null)
+    //  -copy the value of this inorder successor to the node we want to delete
+    //  -delete the inorder successor
+    function minValue(node) {
+      let minValue = node.data;
+      while (node.left !== null) {
+        minValue = node.left.data;
+        node = node.left;
+      }
+      return minValue;
+    }
+
+    value = parseInt(value);
+    //base case
+    if (searcher === null) return searcher;
+
+    if (searcher.data > value) {
+      //delete into the left subtree
+      searcher.left = remove(value, searcher.left);
+    } else if (searcher.data < value) {
+      //delete into the right subtree
+      searcher.right = remove(value, searcher.right);
+      //if both previous checks failed, we found the node we want to remove
+    } else {
+      //checks for 0 or 1 children node types
+      if (searcher.left === null) return searcher.right;
+      else if (searcher.right === null) return searcher.left;
+
+      //for a node with 2 children - we get its inorder successor
+      //  which is the smalles value in the node's right subtree
+      searcher.data = minValue(searcher.right);
+
+      //remove the node's inorder successor
+      searcher.right = remove(searcher.data, searcher.right);
+    }
+    return searcher;
+  };
+
   const find = (value, searcher = rootNode) => {
     value = parseInt(value);
     if (searcher === null || searcher.data === value) {
@@ -55,7 +99,7 @@ const treeFactory = (arr) => {
 
     return find(value, searcher.left);
   };
-  return { rootNode, insert, find };
+  return { rootNode, insert, find, remove };
 };
 
 const buildTree = (arr, start, end) => {
@@ -95,4 +139,10 @@ console.log();
 console.log();
 
 tree.insert(40);
+prettyPrint(tree.rootNode);
+
+console.log();
+console.log();
+
+tree.remove(100);
 prettyPrint(tree.rootNode);
