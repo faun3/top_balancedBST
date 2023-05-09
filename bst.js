@@ -55,7 +55,8 @@ const arraySanitizer = (arr) => {
 };
 
 const array1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const array = [1, 2, 3, 4, 5, 6, 7];
+const array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 sanitizedArr = arraySanitizer(array1);
-let tree = treeFactory(array1);
+console.log(sanitizedArr);
+let tree = treeFactory(sanitizedArr);
 prettyPrint(tree);
