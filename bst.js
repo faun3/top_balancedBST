@@ -26,10 +26,21 @@ const nodeFactory = (val) => {
 };
 
 const treeFactory = (arr) => {
-  rootNode = buildTree(arr, 0, arr.length - 1);
+  let rootNode = buildTree(arr, 0, arr.length - 1);
 
-  const insert = (value) => {
-    let newNode = nodeFactory(value);
+  const insert = (value, searcher = rootNode) => {
+    value = parseInt(value);
+    if (searcher === null) {
+      searcher = nodeFactory(value);
+      return searcher;
+    }
+
+    if (searcher.data < value) {
+      searcher.right = insert(value, searcher.right);
+    } else if (searcher.data > value) {
+      searcher.left = insert(value, searcher.left);
+    }
+    return searcher;
   };
 
   const find = (value, searcher = rootNode) => {
@@ -72,10 +83,16 @@ const arraySanitizer = (arr) => {
 };
 
 const array1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-sanitizedArr = arraySanitizer(array1);
+
+const smallArr = [100, 20, 500, 10, 30];
+
+sanitizedArr = arraySanitizer(smallArr);
 console.log(sanitizedArr);
+
 let tree = treeFactory(sanitizedArr);
 prettyPrint(tree.rootNode);
+console.log();
+console.log();
 
-let found = tree.find(4);
-console.log(found);
+tree.insert(40);
+prettyPrint(tree.rootNode);
