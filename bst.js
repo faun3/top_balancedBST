@@ -11,28 +11,35 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
+function uniq(a) {
+  var seen = {};
+  return a.filter(function (item) {
+    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+  });
+}
+
 const nodeFactory = (val) => {
-  value = val;
+  data = val;
   left = null;
   right = null;
-  return { value, left, right };
+  return { data, left, right };
 };
 
 const treeFactory = (arr) => {
-  root = buildTree(arr);
-  return root;
+  node = buildTree(arr, 0, arr.length - 1);
+  return node;
 };
 
-const buildTree = (arr) => {
-  if (arr.length === 0) return;
+const buildTree = (arr, start, end) => {
+  //if array length is 0 i.e. the 2 pointers have crossed over we return
+  if (start > end) return null;
 
-  mid = arr.length / 2;
-  root = nodeFactory(arr[mid]);
-  rightSubtree = arr.splice(0, mid);
-  leftSubtree = arr;
-  root.left = buildTree(leftSubtree);
-  root.right = buildTree(rightSubtree);
-  return root;
+  //no overflow method of calculating mid
+  let mid = parseInt((start + end) / 2);
+  let node = nodeFactory(arr[mid]);
+  node.left = buildTree(arr, start, mid - 1);
+  node.right = buildTree(arr, mid + 1, end);
+  return node;
 };
 
 const arraySanitizer = (arr) => {
@@ -47,15 +54,8 @@ const arraySanitizer = (arr) => {
   return arr;
 };
 
-const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-sanitizedArr = arraySanitizer(array);
-console.log(arraySanitizer(sanitizedArr));
-//let bst = treeFactory(sanitizedArr);
-//prettyPrint(bst);
-
-function uniq(a) {
-  var seen = {};
-  return a.filter(function (item) {
-    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-  });
-}
+const array1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+const array = [1, 2, 3, 4, 5, 6, 7];
+sanitizedArr = arraySanitizer(array1);
+let tree = treeFactory(array1);
+prettyPrint(tree);
